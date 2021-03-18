@@ -17,6 +17,28 @@ app.get( '/:keyword', function( req, res ){
   var keyword = req.params.keyword;
   if( keyword ){
     var url = 'https://www.amazon.co.jp/s?k=' + encodeURI( keyword );
+
+    var sort = req.query.sort;
+    if( sort ){
+      switch( sort ){
+      case 'byprice':
+        url += '&s=price-asc-rank';
+        break;
+      case 'bypricedesc':
+        url += '&s=price-desc-rank';
+        break;
+      case 'byreview':
+        url += '&s=review-rank';
+        break;
+      case 'bydate':
+        url += '&s=date-desc-rank';
+        break;
+      default:
+        url += '&s=' + sort;
+        break;
+      }
+    }
+
     client.fetch( url, {}, 'UTF-8', function( err, $, res0, body0 ){
       if( err ){
         res.status( 400 );
