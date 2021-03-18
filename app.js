@@ -16,7 +16,7 @@ app.get( '/:keyword', function( req, res ){
 
   var keyword = req.params.keyword;
   if( keyword ){
-    var url = 'https://www.amazon.co.jp/s?k=' + keyword;
+    var url = 'https://www.amazon.co.jp/s?k=' + encodeURI( keyword );
     client.fetch( url, {}, 'UTF-8', function( err, $, res0, body0 ){
       if( err ){
         res.status( 400 );
