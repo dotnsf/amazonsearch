@@ -17,7 +17,7 @@ This code islicensed under MIT.
 
 ## Copyright
 
-2031 K.Kimura @ Juge.Me all rights reserved.
+2021 K.Kimura @ Juge.Me all rights reserved.
 
 
 
