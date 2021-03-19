@@ -5,6 +5,16 @@ var express = require( 'express' ),
 
 var settings = require( './settings' );
 
+//. CORS(#1)
+if( settings && settings.cors && settings.cors.length && settings.cors[0] ){
+  var cors = require( 'cors' );
+  var option = {
+    origin: settings.cors,
+    optionSuccessStatus: 200
+  };
+  app.use( cors( option ) );
+}
+
 app.get( '/', function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
   res.write( JSON.stringify( { howtouse: 'access to /{searchkeyword for amazon.jp}' } ) );
