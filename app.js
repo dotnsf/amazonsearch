@@ -5,6 +5,9 @@ var express = require( 'express' ),
 
 var settings = require( './settings' );
 
+app.use( express.Router() );
+app.use( express.static( __dirname + '/public' ) );
+
 //. CORS(#1)
 if( settings && settings.cors && settings.cors.length && settings.cors[0] ){
   var cors = require( 'cors' );
