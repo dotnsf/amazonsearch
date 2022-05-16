@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta charset="utf8"/>
+<meta http-equiv="pragma" content="no-cache"/>
+<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="URA-PI"/>
+
+<title>URA-PI</title>
+<style>
+#result{
+  background-color: #ffc;
+}
+</style>
+<script>
+$(function(){
+  $('#frm0').submit( function(){
+    var text = $('#text').val().split( "\r" ).join( "" ).split( "\n" ).join( "" );
+    var data = {
+      text: text
+    };
+    $.ajax({
+      url: '/api/pi',
+      type: 'POST',
+      data: data,
+      dataType: 'json',
+      success: function( result ){
+        //console.log( result );
+        $('#result').html( JSON.stringify( result, null, 2 ) );
+      },
+      error: function( e0, e1, e2 ){
+        console.log( e0, e1, e2 );
+        $('#result').html( JSON.stringify( e0, null, 2 ) );
+      }
+    });
+
+    return false;
+  });
+});
+</script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a id="brand-title" class="navbar-brand" href="#">URA-PI</a>
+</nav>
+
+<div class="container">
+  <form name="frm0" id="frm0">
+  <textarea class="form-control" id="text">
+軽く動作確認するだけならコマンド入力で問題ありませんが、別のエンドポイントにアクセスする・正常系異常系のテストをするとなれば毎回同じコマンドを入力するのは面倒です。シェルスクリプトでAPI実行を効率化してみましょう。今回はスクリプトのパスを通していないのでフルパスで実行していますが、パスを通しておくと更に少ない手間でAPIにアクセスできるでしょう。また、どのようなJSONデータを使うのか予め決まっている場合はデータをjsonファイルに定義しておき、引数でファイルパスを渡すという方法も良いかもしれません。
+  </textarea>
+  <input type="submit" class="btn btn-primary" value="POST"/>
+  </form>
+</div>
+
+<div class="container" style="position: relative; top: 30px;">
+  <blockquote><pre id="result">
+  </pre></blockquote>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+swagger: '2.0'
+info:
+  description: Amazon PA API ドキュメント
+  version: 0.0.1
+  title: Amazon PA REST APIs
+host: amazon-pa.herokuapp.com
+basePath: /
+tags:
+  - name: pa
+    description: PA API
+schemes:
+  - http
+  - https
+paths:
+  /{keyword}:
+    get:
+      tags:
+        - pa
+      summary: search by keyword
+      description: search by keyword
+      produces:
+        - application/json
+      parameters:
+        - name: keyword
+          type: string
+          in: path
+          description: 検索キーワード
+          required: true
+        - name: sort
+          type: string
+          in: query
+          description: ソート指定(byprice/bypricedesc/byreview/bydate)
+      responses:
+        '200':
+          description: 成功
+        '400':
+          description: エラー
+  /api/pi:
+    post:
+      tags:
+        - pi
+      summary: Personality Insight
+      description: Personality Insight
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/PiRequest'
+      responses:
+        '200':
+          description: 成功
+        '400':
+          description: エラー
+definitions:
+  PiRequest:
+    type: object
+    properties:
+      text:
+        type: string
+        description: 日本語テキスト
