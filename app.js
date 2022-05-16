@@ -86,37 +86,6 @@ app.get( '/:keyword', function( req, res ){
               if( settings && settings.aws_tag ){
                 link += '?tag=' + settings.aws_tag + '&linkCode=osi&th=1&psc=1';
               }
-              /*
-              var image_a = $(image_span).find( 'a' ).eq( 0 );
-              if( image_a ){
-                link = $(image_a).attr( 'href' );
-
-                if( link ){
-                  link = link.split( '%2F' ).join( '/' );
-
-                  var tmp = link.split( '&' );
-                  tmp.forEach( function( t, idx ){
-                    if( t.startsWith( 'url=' ) ){
-                      link = t.substr( 4 );
-                    }
-                  });
-
-                  tmp = link.split( '&' );
-                  tmp.forEach( function( t, idx ){
-                    if( t.startsWith( 'spLa=' ) ){
-                      tmp.splice( idx, 1 );
-                    }
-                  });
-
-                  if( settings && settings.aws_tag ){
-                    tmp.push( 'tag=' + settings.aws_tag );
-                  }
-                  link = tmp.join( '&' );
-
-                  link = 'https://www.amazon.co.jp' + link;
-                }
-              }
-              */
 
               //. IMAGE_SRC
               var image = image_span.find( 'img' );
@@ -162,10 +131,8 @@ app.get( '/:keyword', function( req, res ){
               //. DENOM（評価母数）
               var row_div = star_i.parent().parent().parent().parent();
               if( row_div ){
-                //var denom_span = row_div.find( 'span' ).eq( 1 );
                 var denom_span = row_div.find( 'span.a-size-base' ).eq( 0 );
                 if( denom_span ){
-                  //var denom_tmp = denom_span.attr( 'aria-label' );
                   var denom_tmp = denom_span.text();
                   denom_tmp = denom_tmp.split( ',' ).join( '' );
                   if( denom_tmp ){
@@ -175,7 +142,6 @@ app.get( '/:keyword', function( req, res ){
               }
             }
         
-            console.log( asin, link, image_src, name, price, star, denom );
             if( link && image_src && name ){
               var item = { asin: asin, name: name, link: link, image_src: image_src, price: price };
               if( star > -1 ){

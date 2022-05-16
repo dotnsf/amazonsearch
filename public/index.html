@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta charset="utf8"/>
+<meta http-equiv="pragma" content="no-cache"/>
+<script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="Amazon Search Sample"/>
+
+<title>Amazon Search Sample</title>
+<style>
+#result{
+  background-color: #ffc;
+}
+</style>
+<script>
+$(function(){
+  $('#frm0').submit( function(){
+    $('#results').html( '' );
+    var sort = $('#sort').val();
+    var keyword = $('#keyword').val();
+    $.ajax({
+      url: '/' + keyword + '?sort=' + sort,
+      type: 'GET',
+      success: function( result ){
+        //console.log( result );
+        if( result && result.status && result.items ){
+          var table = '<table clsss="table table-bordered">'
+            + '<thead>'
+            + '<tr><th>#</th><th>名前</th><th>価格</th><th>評価</th><th>レビュー数</th>'
+            + '</thead>'
+            + '<tbody>';
+
+          for( var i = 0; i < result.items.length; i ++ ){
+            var item = result.items[i];
+            var tr = '<tr>'
+              + '<td>'
+              + item.asin + '<br/><img src="' + item.image_src + '" width="200" height="200"/>'
+              + '</td>'
+              + '<td>'
+              + '<a target="_blank" href="' + item.link + '">' + item.name + '</a>'
+              + '</td>'
+              + '<td>'
+              + ( item.price ? item.price : '-' )
+              + '</td>'
+              + '<td>'
+              + ( item.star ? item.star : '-' )
+              + '</td>'
+              + '<td>'
+              + ( item.denom ? item.denom : '-' )
+              + '</td>'
+              + '</tr>';
+
+            table += tr;
+          }
+
+          table += '</tbody></table>';
+          $('#results').html( table );
+        }
+      },
+      error: function( e0, e1, e2 ){
+        console.log( e0, e1, e2 );
+        $('#result').html( JSON.stringify( e0, null, 2 ) );
+      }
+    });
+
+    return false;
+  });
+});
+</script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a id="brand-title" class="navbar-brand" href="#">Amazon Search Sample</a>
+</nav>
+
+<div class="container">
+  <form name="frm0" id="frm0">
+    <table width="100%">
+      <tr>
+        <td>
+          <select id="sort">
+            <option value="byprice" selected>価格安い順</option>
+            <option value="bypricedesc">価格高い順</option>
+            <option value="byreview">評価順</option>
+            <option value="bydate">日付順</option>
+          </select>
+        </td>
+        <td>
+          <input type="text" id="keyword" value="" class="form-control" placeholder="検索ワード"/>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
+
+<div class="container" id="results" style="position: relative; top: 30px;">
+</div>
+
+</body>
+</html>
