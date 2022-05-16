@@ -69,7 +69,7 @@ app.get( '/:keyword', function( req, res ){
           var asin = $(this).attr( 'data-asin' );
           var image_src = null;
           var link = null;
-          var link = 'https://www.amazon.co.jp//dp/' + asin;
+          var link = 'https://www.amazon.co.jp/dp/' + asin;
           var name = null;
           //var jancode = null;
           var star = -1;
