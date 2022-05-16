@@ -8,19 +8,25 @@ var settings = require( './settings' );
 app.use( express.Router() );
 app.use( express.static( __dirname + '/public' ) );
 
-//. CORS(#1)
+//. CORS
 if( settings && settings.cors && settings.cors.length && settings.cors[0] ){
   var cors = require( 'cors' );
   var option = {
-    origin: settings.cors,
+    origin: function( origin, callback ){
+      if( settings.cors.indexOf( origin ) > -1 ){
+        callback( null, true );
+      }else{
+        callback( new Error( 'Not allowed by CORS' ) );
+      }
+    },
     optionSuccessStatus: 200
   };
   app.use( cors( option ) );
 }
 
-app.get( '/', function( req, res ){
+app.get( '/ping', function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
-  res.write( JSON.stringify( { howtouse: 'access to /{searchkeyword for amazon.jp}' } ) );
+  res.write( JSON.stringify( { status: true, message: 'PONG' } ) );
   res.end();
 });
 
