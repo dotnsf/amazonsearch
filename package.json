@@ -5,12 +5,12 @@
         "start": "node app.js"
     },
     "dependencies": {
-        "cheerio-httpcli": "^0.8.1",
+        "cheerio-httpcli": "^0.8.3",
         "cors": "^2.8.5",
-        "express": "^4.17.1"
+        "express": "^4.18.1"
     },
     "repository": {},
     "engines": {
-        "node": "10.x"
+        "node": "14.x"
     }
 }

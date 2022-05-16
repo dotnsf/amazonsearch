@@ -19,6 +19,24 @@ Simple GET API to search items in Amazon.JP
 
   - `?sort=bydate` : by Date
 
+
+## References
+
+- SearchIndex: 
+
+  - https://webservices.amazon.co.jp/paapi5/documentation/locale-reference/japan.html#search-index
+
+
+- Find ASIN by Keyword: 
+
+  - https://www.amazon.co.jp/s?k=(keyword)(&s=sortorder)
+
+- ASIN to Link:
+
+  - https://www.amazon.co.jp/dp/(ASIN)?tag=(tag)&linkCode=osi&th=1&psc=1
+
+
+
 ## Licensing
 
 This code islicensed under MIT.

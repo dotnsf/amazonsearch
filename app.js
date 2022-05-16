@@ -60,20 +60,27 @@ app.get( '/:keyword', function( req, res ){
           var asin = $(this).attr( 'data-asin' );
           var image_src = null;
           var link = null;
+          var link = 'https://www.amazon.co.jp//dp/' + asin;
           var name = null;
           //var jancode = null;
           var star = -1;
           var denom = -1;
           var price = null;
 
-          var target = $(this).find( 'div.a-spacing-medium' ).eq( 0 );
+          //var target = $(this).find( 'div.a-spacing-medium' ).eq( 0 );
+          var target = $(this).find( 'div.a-spacing-base' ).eq( 0 );
           if( target ){
             //. link, image_src
-            var image_span = target.find( 'span[data-component-type="s-product-image"]' ).eq( 0 );
+            var image_span = $(target).find( 'span[data-component-type="s-product-image"]' ).eq( 0 );
             if( image_span ){
-              var image_a = image_span.find( 'a' ).eq( 0 );
+              //. LINK
+              if( settings && settings.aws_tag ){
+                link += '?tag=' + settings.aws_tag + '&linkCode=osi&th=1&psc=1';
+              }
+              /*
+              var image_a = $(image_span).find( 'a' ).eq( 0 );
               if( image_a ){
-                link = image_a.attr( 'href' );
+                link = $(image_a).attr( 'href' );
 
                 if( link ){
                   link = link.split( '%2F' ).join( '/' );
@@ -100,20 +107,22 @@ app.get( '/:keyword', function( req, res ){
                   link = 'https://www.amazon.co.jp' + link;
                 }
               }
+              */
 
+              //. IMAGE_SRC
               var image = image_span.find( 'img' );
               if( image ){
                 image_src = image.attr( 'src' );
               }
             }
 
-            //. name
+            //. NAME
             var name_span = target.find( 'div.a-spacing-top-small h2 span' ).eq( 0 );
             if( name_span ){
               name = name_span.text();
             }
 
-            //. price
+            //. PRICE
             var price_span = target.find( 'div.a-spacing-top-small span.a-price span.a-offscreen' ).eq( 0 );
             if( price_span ){
               price_text = price_span.text();
@@ -126,7 +135,7 @@ app.get( '/:keyword', function( req, res ){
               }
             }
         
-            //. star
+            //. STAR
             var star_i = target.find( 'div.a-spacing-top-micro i.a-icon-star-small' ).eq( 0 );
             if( star_i ){
               var star_class = star_i.attr( 'class' );
@@ -141,7 +150,7 @@ app.get( '/:keyword', function( req, res ){
                 });
               }
 
-              //. denom
+              //. DENOM（評価母数）
               var row_div = star_i.parent().parent().parent().parent();
               if( row_div ){
                 //var denom_span = row_div.find( 'span' ).eq( 1 );
@@ -157,7 +166,7 @@ app.get( '/:keyword', function( req, res ){
               }
             }
         
-        
+            console.log( asin, link, image_src, name, price, star, denom );
             if( link && image_src && name ){
               var item = { asin: asin, name: name, link: link, image_src: image_src, price: price };
               if( star > -1 ){
