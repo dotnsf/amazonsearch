@@ -29,6 +29,27 @@ if( settings && settings.cors && settings.cors.length && settings.cors[0] ){
   app.use( cors( option ) );
 }
 
+//. Search Indexes
+var search_indexes = [];
+client.fetch( 'https://www.amazon.co.jp/', {}, 'UTF-8', function( err, $, res0, body0 ){
+  if( err ){
+    console.log( err );
+  }else{
+    $('#searchDropdownBox option').each( function(){
+      var name = $(this).text().trim();
+      var o = $(this).attr( 'value' ).split( '=' );
+      if( o && o.length == 2 && o[0] == 'search-alias' ){
+        if( o[1] == 'aps' ){  //. すべてのカテゴリー
+          o[1] = '';
+        }
+        search_indexes.push( { name: name, index: o[1] } );
+      }
+    });
+    console.log( search_indexes );
+  }
+});
+
+
 async function getJancode( url ){
   return new Promise( async ( resolve, reject ) => {
     client.fetch( url, {}, 'UTF-8', function( err, $, res0, body0 ){

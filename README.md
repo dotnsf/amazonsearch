@@ -44,7 +44,7 @@ Simple GET API to search items in Amazon.JP
 
 - **Find ASIN by Keyword**: 
 
-  - https://www.amazon.co.jp/s?k=(keyword)(&s=sortorder)
+  - https://www.amazon.co.jp/s?k=(keyword)(&s=sortorder)(&i=searchindex)
 
 - ASIN to Link:
 
