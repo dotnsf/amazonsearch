@@ -45,7 +45,7 @@ client.fetch( 'https://www.amazon.co.jp/', {}, 'UTF-8', function( err, $, res0, 
         search_indexes.push( { name: name, index: o[1] } );
       }
     });
-    console.log( search_indexes );
+    //console.log( search_indexes );
   }
 });
 
@@ -78,6 +78,12 @@ async function getJancode( url ){
 app.get( '/ping', function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
   res.write( JSON.stringify( { status: true, message: 'PONG' } ) );
+  res.end();
+});
+
+app.get( '/searchindexes', function( req, res ){
+  res.contentType( 'application/json; charset=utf-8' );
+  res.write( JSON.stringify( { status: true, searchindexes: search_indexes } ) );
   res.end();
 });
 

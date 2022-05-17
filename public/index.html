@@ -19,12 +19,30 @@
 </style>
 <script>
 $(function(){
+  $.ajax({
+    type: 'GET',
+    url: './searchindexes',
+    success: function( result ){
+      if( result && result.status && result.searchindexes ){
+        for( var i = 0; i < result.searchindexes.length; i ++ ){
+          var searchindex = result.searchindexes[i];
+          var o = '<option value="' + searchindex.index + '">' + searchindex.name + '</option>';
+          $('#searchindex').append( o );
+        }
+      }
+    },
+    error: function( e0, e1, e2 ){
+      console.log( e0, e1, e2 );
+    }
+  });
+  
   $('#frm0').submit( function(){
     $('#results').html( '' );
+    var searchindex = $('#searchindex').val();
     var sort = $('#sort').val();
     var keyword = $('#keyword').val();
     $.ajax({
-      url: '/' + keyword + '?sort=' + sort,
+      url: '/' + keyword + '?sort=' + sort + '&i=' + searchindex,
       type: 'GET',
       success: function( result ){
         //console.log( result );
@@ -86,6 +104,10 @@ $(function(){
   <form name="frm0" id="frm0">
     <table width="100%">
       <tr>
+        <td>
+          <select id="searchindex">
+          </select>
+        </td>
         <td>
           <select id="sort">
             <option value="byprice" selected>価格安い順</option>
