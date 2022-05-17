@@ -8,6 +8,11 @@ var settings = require( './settings' );
 app.use( express.Router() );
 app.use( express.static( __dirname + '/public' ) );
 
+client.set( 'browser', 'chrome' );
+client.set( 'headers', { 
+  'Referer': 'https://www.amazon.co.jp'
+});
+
 //. CORS
 if( settings && settings.cors && settings.cors.length && settings.cors[0] ){
   var cors = require( 'cors' );
@@ -24,13 +29,38 @@ if( settings && settings.cors && settings.cors.length && settings.cors[0] ){
   app.use( cors( option ) );
 }
 
+async function getJancode( url ){
+  return new Promise( async ( resolve, reject ) => {
+    client.fetch( url, {}, 'UTF-8', function( err, $, res0, body0 ){
+      if( err ){
+        console.log( err );
+        resolve( null );
+      }else{
+        var jancode = '';
+        $('#detailBullets_feature_div ul li').each( function(){
+          var item_spans = $(this).find( 'span' );
+          if( item_spans.length == 3 ){
+            var item_span1 = item_spans.eq( 1 );
+            //console.log( item_span1.text() );
+            if( item_span1.text() == '製造元リファレンス' ){
+              jancode = item_spans.eq( 2 ).text();
+            }
+          }
+        });
+
+        resolve( jancode );
+      }
+    });
+  });
+}
+
 app.get( '/ping', function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
   res.write( JSON.stringify( { status: true, message: 'PONG' } ) );
   res.end();
 });
 
-app.get( '/:keyword', function( req, res ){
+app.get( '/:keyword', async function( req, res ){
   res.contentType( 'application/json; charset=utf-8' );
 
   var keyword = req.params.keyword;
@@ -60,18 +90,18 @@ app.get( '/:keyword', function( req, res ){
 
     client.fetch( url, {}, 'UTF-8', function( err, $, res0, body0 ){
       if( err ){
+        console.log( err );
         res.status( 400 );
         res.write( JSON.stringify( { status: false, keyword: keyword, error: err } ) );
         res.end();
       }else{
         var items = [];
-        $('div.s-main-slot div[data-component-type="s-search-result"]').each( function(){
+        $('div.s-main-slot div[data-component-type="s-search-result"]').each( async function(){
           var asin = $(this).attr( 'data-asin' );
           var image_src = null;
-          var link = null;
           var link = 'https://www.amazon.co.jp/dp/' + asin;
           var name = null;
-          //var jancode = null;
+          var jancode = null;
           var star = -1;
           var denom = -1;
           var price = null;
@@ -141,9 +171,34 @@ app.get( '/:keyword', function( req, res ){
                 }
               }
             }
+
+            //. JAN コード
+            if( asin ){
+              var jandiv = $('div[data-asin="' + asin + '"] a.a-link-normal').eq( 0 );
+              if( jandiv ){
+                var janhref = jandiv.attr( 'href' );
+                var tmp = janhref.split( '-' );
+                if( tmp.length > 2 ){
+                  var code = tmp[1];
+                  var b = true;
+                  for( var i = 0; i < code.length && b; i ++ ){
+                    var c = code.substr( i, 1 );
+                    b = ( '0' <= c && c <= '9' );
+                  }
+                  if( b ){
+                    jancode = code;
+                  }
+                }
+              }
+            }
         
             if( link && image_src && name ){
-              var item = { asin: asin, name: name, link: link, image_src: image_src, price: price };
+              //. 一覧からはJANコードが見つからなかった場合に、更に調べるか？
+              if( link && !jancode && settings.jancodelink ){
+                jancode = await getJancode( link );
+              }
+
+              var item = { asin: asin, name: name, link: link, image_src: image_src, price: price, jancode: jancode };
               if( star > -1 ){
                 item.star = star;
               }
