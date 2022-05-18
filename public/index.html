@@ -49,7 +49,7 @@ $(function(){
         if( result && result.status && result.items ){
           var table = '<table clsss="table table-bordered">'
             + '<thead>'
-            + '<tr><th>#</th><th>名前</th><th>価格</th><th>コード</th><th>評価</th><th>レビュー数</th>'
+            + '<tr><th>#</th><th>名前</th><th>価格</th><th>評価</th><th>レビュー数</th>'
             + '</thead>'
             + '<tbody>';
 
@@ -58,15 +58,13 @@ $(function(){
             var tr = '<tr>'
               + '<td>'
               + item.asin + '<br/><img src="' + item.image_src + '" width="100" height="100"/>'
+              + ( item.jancode ? '<br/>(' + item.jancode + ')' : '' )
               + '</td>'
               + '<td style="width: 40%;">'
               + '<a target="_blank" href="' + item.link + '">' + item.name + '</a>'
               + '</td>'
               + '<td>'
               + ( item.price ? item.price : '-' )
-              + '</td>'
-              + '<td>'
-              + ( item.jancode ? item.jancode : '-' )
               + '</td>'
               + '<td>'
               + ( item.star ? item.star : '-' )
