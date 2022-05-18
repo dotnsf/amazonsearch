@@ -25,6 +25,19 @@ paths:
           description: 成功
         '400':
           description: エラー
+  /searchindexes:
+    get:
+      tags:
+        - pa
+      summary: Retrieve search indexes
+      description: Retrieve search indexes
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: 成功
+        '400':
+          description: エラー
   /{keyword}:
     get:
       tags:
