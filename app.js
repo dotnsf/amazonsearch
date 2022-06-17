@@ -140,8 +140,8 @@ app.get( '/:keyword', async function( req, res ){
             var image_span = $(target).find( 'span[data-component-type="s-product-image"]' ).eq( 0 );
             if( image_span ){
               //. LINK
-              if( settings && settings.aws_tag ){
-                link += '?tag=' + settings.aws_tag + '&linkCode=osi&th=1&psc=1';
+              if( settings && settings.pa_tag ){
+                link += '?tag=' + settings.pa_tag + '&linkCode=osi&th=1&psc=1';
               }
 
               //. IMAGE_SRC

@@ -22,13 +22,13 @@ Simple GET API to search items in Amazon.JP
 
 ## How to setup environment values.
 
-- `AWS_TAG`:
+- `PA_TAG`:
 
   - Set Amazon PA TAG( like `xxxxxx-nn` ).
 
   - Tagged URL would be similar like this:
 
-    - `https://www.amazon.co.jp/dp/(ASIN)?tag=(AWS_TAG)&linkCode=osi&th=1&psc=1`
+    - `https://www.amazon.co.jp/dp/(ASIN)?tag=(PA_TAG)&linkCode=osi&th=1&psc=1`
 
 - `CORS`:
 
