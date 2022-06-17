@@ -3,7 +3,7 @@ info:
   description: Amazon PA API ドキュメント
   version: 0.0.1
   title: Amazon PA REST APIs
-host: amazon-pa.herokuapp.com
+host: amazon-pa-api.yellowmix.net
 basePath: /
 tags:
   - name: pa
